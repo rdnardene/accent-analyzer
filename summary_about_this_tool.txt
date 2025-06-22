@@ -1,0 +1,1 @@
+This tool analyzes uploaded video or audio files to detect the speaker’s English accent. It transcribes the speech using Whisper and classifies the accent as American, British, or Australian, with a confidence score. Designed for assessment purposes, the app is easy to use and runs locally using Streamlit.

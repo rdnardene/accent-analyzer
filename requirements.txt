@@ -1,0 +1,6 @@
+streamlit
+pytube
+moviepy
+openai-whisper
+torch
+yt-dlp
