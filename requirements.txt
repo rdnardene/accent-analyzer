@@ -1,6 +1,6 @@
 streamlit
-whisper
 torch
 numpy
-ffmpeg-python
 pydub
+ffmpeg-python
+git+https://github.com/openai/whisper.git
