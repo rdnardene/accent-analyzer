@@ -1,6 +1,6 @@
+import ffmpeg
 import os
 import whisper
-from moviepy.editor import VideoFileClip
 
 def extract_audio_from_file(video_path):
     audio_path = video_path.replace(".mp4", ".wav")

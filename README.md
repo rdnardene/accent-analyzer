@@ -29,8 +29,8 @@ This tool was developed as part of a hiring process to demonstrate the ability t
 - Python 3.10+
 - [Streamlit](https://streamlit.io/)
 - [OpenAI Whisper](https://github.com/openai/whisper)
-- [MoviePy](https://zulko.github.io/moviepy/)
-- FFmpeg (system-level dependency)
+- ffmpeg-python for audio extraction
+- Torch, NumPy, Pydub
 
 ---
 
@@ -62,8 +62,9 @@ This helps prevent errors (like FFmpeg or missing Python versions).
 - The tool works offline — no API keys required.
 
 # Requires FFmpeg to be installed and added to your system PATH.
-# For .mp4 files, moviepy is used to extract the audio before transcription.
 # Keyword-based accent detection allows fast, lightweight classification.
+# ffmpeg-python is used to convert .mp4 and .m4a files into .wav for Whisper transcription.
+# FFmpeg must be installed and added to system PATH (for local runs).
 
 
 

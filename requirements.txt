@@ -1,8 +1,6 @@
 streamlit
 whisper
-moviepy
 torch
 numpy
 ffmpeg-python
 pydub
-pytube
