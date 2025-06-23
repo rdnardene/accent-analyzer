@@ -1,0 +1,28 @@
+⚠️ Note on Deployment Issue in Streamlit Cloud
+While the core functionality of this tool works as intended locally, there is a known deployment issue in Streamlit Cloud related to the use of FFmpeg, which is required for audio extraction from video files (e.g., .mp4, .m4a).
+
+🛠️ Root of the Issue:
+Streamlit Cloud does not include FFmpeg in its system environment, and it no longer supports the use of custom install scripts like .streamlit/setup.sh. While I included a bundled static FFmpeg binary in the project and updated the code to use it, Streamlit Cloud still fails to execute the binary due to file permission restrictions (+x not respected from Windows Git clients).
+
+✅ However:
+The tool works fully and correctly in a local environment
+
+Audio can be extracted from .mp4 and transcribed successfully
+
+Whisper transcription and accent classification work as expected
+
+The UI functions correctly via Streamlit when run locally
+
+🔗 GitHub Repository for Local Testing
+You can clone and run the tool locally using this GitHub repository:
+
+https://github.com/rdnardene/accent-analyzer
+
+To run it locally:
+
+git clone https://github.com/rdnardene/accent-analyzer.git
+cd accent-analyzer
+python -m venv venv
+venv\\Scripts\\activate   # or source venv/bin/activate on Mac/Linux
+pip install -r requirements.txt
+streamlit run app.py
