@@ -5,7 +5,7 @@ import uuid
 import shutil
 
 
-# ✅ FFmpeg existence check (debug)
+# ✅ FFmpeg existence check (debuging)
 if os.path.exists("./bin/ffmpeg"):
     st.success("✅ FFmpeg binary found at ./bin/ffmpeg")
 else:
@@ -90,6 +90,7 @@ if uploaded_file is not None:
             except Exception as e:
                 st.error(f"❌ Error: {str(e)}")
 
+# ✅ FFmpeg existence check (debuging)
 if not shutil.which("ffmpeg"):
     st.error("❌ FFmpeg is NOT installed!")
 else:
