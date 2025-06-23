@@ -1,38 +1,23 @@
 import streamlit as st
-from utils import extract_audio_from_file, transcribe_audio, classify_accent
 import os
+from utils import extract_audio_from_file, transcribe_audio, classify_accent
 import uuid
 import shutil
 
-
-# ✅ FFmpeg existence check (debuging)
-if os.path.exists("./bin/ffmpeg"):
-    st.success("✅ FFmpeg binary found at ./bin/ffmpeg")
-else:
-    st.error("❌ FFmpeg binary not found at ./bin/ffmpeg")
-
-# Set up app
-st.set_page_config(page_title="English Accent Analyzer", layout="centered")
-st.title("🎤 English Accent Analyzer")
-
-# Setup page
 st.set_page_config(page_title="Accent Analyzer", layout="centered")
 st.title("🎤 Accent Analyzer")
-st.write("Upload a `.mp4`, `.mp3`, `.wav`, or `.mpeg` file to detect the speaker's English accent.")
+st.write("Upload a `.mp4`, `.mp3`, `.wav`, `.m4a`, or `.mpeg` file to detect the speaker's English accent.")
 
-# Session state for history
 if "history" not in st.session_state:
     st.session_state.history = []
 
-# File upload
 uploaded_file = st.file_uploader(
     "Upload a video or audio file",
-    type=["mp4", "mp3", "wav", "mpeg"]
+    type=["mp4", "mp3", "wav", "mpeg", "m4a"]
 )
 
-# Handle upload
 if uploaded_file is not None:
-    file_ext = uploaded_file.name.split(".")[-1]
+    file_ext = uploaded_file.name.split(".")[-1].lower()
     temp_path = f"temp_{uuid.uuid4()}.{file_ext}"
     with open(temp_path, "wb") as f:
         f.write(uploaded_file.read())
@@ -40,26 +25,23 @@ if uploaded_file is not None:
     if st.button("Analyze"):
         with st.spinner("Processing..."):
             try:
-                # Extract audio if it's a video
-                if temp_path.endswith(".mp4"):
+                # Only extract audio if it's a video or compressed stream
+                if temp_path.endswith((".mp4", ".m4a", ".mov")):
                     audio_path = extract_audio_from_file(temp_path)
                 else:
-                    audio_path = temp_path  # already audio
+                    audio_path = temp_path
 
-                # Transcribe and classify
                 transcript = transcribe_audio(audio_path)
                 accent, confidence = classify_accent(transcript)
 
-                # Flags
                 accent_flags = {
                     "American": "🇺🇸",
                     "British": "🇬🇧",
                     "Australian": "🇦🇺",
-                    "Uncertain": "❓"   # The uploaded file will be "Uncertain" if the words used in the audio is not mentioned in def classify_accent(text)
+                    "Uncertain": "❓"  # The uploaded file will be "Uncertain" if the words used in the audio is not mentioned in def classify_accent(text)
                 }
                 flag = accent_flags.get(accent, "🌍")
 
-                # Display results
                 st.success("✅ Analysis Complete")
                 st.markdown("### Transcript")
                 st.text(transcript)
@@ -75,23 +57,15 @@ if uploaded_file is not None:
                     audio_bytes = audio_file.read()
                     st.audio(audio_bytes, format="audio/wav")
 
-                # Save to history
                 st.session_state.history.append({
                     "accent": accent,
                     "confidence": confidence,
                     "transcript": transcript[:100] + "..." if len(transcript) > 100 else transcript
                 })
 
-                # Cleanup
                 if audio_path != temp_path:
                     os.remove(audio_path)
                 os.remove(temp_path)
 
             except Exception as e:
                 st.error(f"❌ Error: {str(e)}")
-
-# ✅ FFmpeg existence check (debuging)
-if not shutil.which("ffmpeg"):
-    st.error("❌ FFmpeg is NOT installed!")
-else:
-    st.success("✅ FFmpeg is installed!")
