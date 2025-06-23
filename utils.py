@@ -1,6 +1,12 @@
 import os
 import whisper
 import ffmpeg
+import platform
+import shutil
+
+# Determine correct ffmpeg path
+IS_CLOUD = os.environ.get("STREAMLIT_SERVER_HEADLESS") == "1"
+FFMPEG_PATH = "./bin/ffmpeg" if IS_CLOUD else shutil.which("ffmpeg")
 
 def extract_audio_from_file(video_path):
     audio_path = os.path.splitext(video_path)[0] + ".wav"
@@ -8,7 +14,7 @@ def extract_audio_from_file(video_path):
         ffmpeg
         .input(video_path)
         .output(audio_path, format='wav', acodec='pcm_s16le', ac=1, ar='16k')
-        .run(overwrite_output=True)
+        .run(cmd=FFMPEG_PATH, overwrite_output=True)
     )
     return audio_path
 
