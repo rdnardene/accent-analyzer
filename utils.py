@@ -1,12 +1,15 @@
-import ffmpeg
 import os
 import whisper
+import ffmpeg
 
 def extract_audio_from_file(video_path):
-    audio_path = video_path.replace(".mp4", ".wav")
-    clip = VideoFileClip(video_path)
-    clip.audio.write_audiofile(audio_path, codec='pcm_s16le')
-    clip.close()
+    audio_path = os.path.splitext(video_path)[0] + ".wav"
+    (
+        ffmpeg
+        .input(video_path)
+        .output(audio_path, format='wav', acodec='pcm_s16le', ac=1, ar='16k')
+        .run(overwrite_output=True)
+    )
     return audio_path
 
 def transcribe_audio(audio_path):
