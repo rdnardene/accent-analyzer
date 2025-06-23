@@ -1,7 +1,6 @@
 import os
 import whisper
 import ffmpeg
-import platform
 import shutil
 
 # Determine correct ffmpeg path
