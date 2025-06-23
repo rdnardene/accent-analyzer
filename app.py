@@ -2,6 +2,18 @@ import streamlit as st
 from utils import extract_audio_from_file, transcribe_audio, classify_accent
 import os
 import uuid
+import shutil
+
+
+# ✅ FFmpeg existence check (debug)
+if os.path.exists("./bin/ffmpeg"):
+    st.success("✅ FFmpeg binary found at ./bin/ffmpeg")
+else:
+    st.error("❌ FFmpeg binary not found at ./bin/ffmpeg")
+
+# Set up app
+st.set_page_config(page_title="English Accent Analyzer", layout="centered")
+st.title("🎤 English Accent Analyzer")
 
 # Setup page
 st.set_page_config(page_title="Accent Analyzer", layout="centered")
@@ -77,3 +89,8 @@ if uploaded_file is not None:
 
             except Exception as e:
                 st.error(f"❌ Error: {str(e)}")
+
+if not shutil.which("ffmpeg"):
+    st.error("❌ FFmpeg is NOT installed!")
+else:
+    st.success("✅ FFmpeg is installed!")
